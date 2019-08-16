@@ -1,0 +1,308 @@
+options {
+LOOKAHEAD=2;
+}
+PARSER_BEGIN(Practica2)
+public class Practica2{
+public static TablaSimbolos tabla = new TablaSimbolos();
+public static void main(String args[]) throws ParseException {
+	Practica2 miParser = new Practica2(System.in);
+	miParser .listaExpr();
+}
+}
+PARSER_END(Practica2)
+SKIP :{
+	" "
+	| "\t"
+	| "\n"
+	| "\r"
+	| "\u00ef"
+	| "\u00bb"
+	| "\u00bf"
+}
+TOKEN: {
+<TIPO: <INT> | <DOUBLE> | <FLOAT> | <BYTE> | <LONG> | <CHAR> | <SHORT> > |
+<OPMENI: "<="> |
+<OPMAYI: ">="> |
+<OPMAY: ">"> |
+<OPMEN: "<"> |
+<OPDIF: "!="> |
+<OPNOT: "!"> |
+<OPCOMP: "=="> |
+<OPIG: "="> |
+<INCREMENT: "++"> |
+<OPSUM: "+"> |
+<OPMUL: "*"> |
+<DECREMENT: "--"> |
+<OPRES: "-"> |
+<OPDIV: "/"> |
+<OPMOD: "%"> |
+<OPPOT: "^"> |
+<OPAND: "&&"> |
+<OPOR: "||">
+|<INT:"int">
+|<ABRIRPARENTESIS:"(">
+|<CERRARPARENTESIS:")">
+|<ABRIRLLAVE:"{">
+|<CERRARLLAVE:"}">
+|<SI:"if">
+|<SINO:"else">
+|<MIENTRAS:"while">
+|<HASTAQUE:"for">
+|<HAZ:"do">
+|<CONMUTADOR:"switch">
+|<CASO: "case">
+|<ROMPER:"break">
+|<PORDEFECTO:"default">
+|<CADENA:"string">
+|<VOF:"vof">
+|<RETORNAR:"return">
+|<ESTATICO:"static">
+|<NULO:"null">
+|<PUBLICA:"public">
+|<VACIO:"void">
+|<PRIVADA:"private">
+|<PROTEGIDA:"protected">
+|<ESCIERTO: "true">
+|<ESFALSO: "false">
+|<DOUBLE: "double">
+|<FLOAT: "float">
+|<LONG: "long">
+|<BYTE: "byte">
+|<CHAR: "char">
+|<SHORT: "short">
+|<ID: <LETRA> (<LETRA> | <DIGDEC> | "_")* > 
+|<PC: [";"]>
+|<DOSPUNTOS: [":"]>
+|<ESPACIO: [" "]>
+|<COMILLA: ["'"]>
+|<ENTERO: ("0" | ["1"-"9"](<DIGDEC>)*)>|
+<DIGDEC: ["0"-"9"]>|
+<LETRA: (["a"-"z"]|["A"-"Z"])> |
+<PUNTO: ".">|
+<COMA: ","> 
+
+}
+
+void listaExpr() : {} {
+    (declaracion() | asignacion() )+
+    //A()
+}
+void declaracion() :{
+    Token tipo, identificador;
+    double val = 0;
+}{
+    (tipo=<TIPO> identificador=<ID> (<OPIG> val=A())? (insert())* <PC>) 
+    {
+        if(tabla.existe(identificador.image)){
+            System.out.println("YA SE HA DECLARADO LA VARIABLE "+identificador);
+        }else{
+            String valor=Double.toString(val);
+            tabla.insertar(identificador.image, tipo.image, null, "0", valor);
+            tabla.imprimir();
+        }	
+    }
+}
+void insert() :{
+    Token identificador;
+    double val = 0;
+}{
+    (<COMA> identificador=<ID> (<OPIG> val=A())?) 
+    {
+        if(tabla.existe(identificador.image)){
+            System.out.println("YA SE HA DECLARADO LA VARIABLE "+identificador);
+        }else{
+            String valor=Double.toString(val);
+            tabla.insertar(identificador.image, null, null, "0", valor);
+        }
+    }	
+}
+void asignacion() :{
+    Token tipo, identificador, tipoCasteo=null, idCasteo=null;
+    double val=0;
+}{
+    (identificador=<ID> (<OPIG> ((val=A()) |"("tipoCasteo=<TIPO>")" idCasteo=<ID>))? <PC>)
+    {
+        if(!tabla.existe(identificador.image)){
+            System.out.println("LA VARIABLE "+identificador+ " NO SE HA DECLARADO");
+        }else{
+            if(tipoCasteo == null){
+                String valor=Double.toString(val);
+                tabla.asignar(identificador.image, valor);
+            } else {
+                if(val == 0){
+                    String tipoString = tabla.getTipo(identificador.image);
+                    String tipoCasteoString = tipoCasteo.image;
+                    if(tabla.existe(idCasteo.image)){
+                        if(tipoCasteo.image.equals(tipoString)){
+                            String cast = tabla.getTipo(idCasteo.image);
+                            boolean correcto = false;
+                            switch(tipoCasteoString) {
+                                case "byte":
+                                    switch(cast){
+                                        case "short":
+                                        case "int":
+                                        case "long":
+                                        case "float":
+                                        case "double":
+                                        case "char":
+                                            correcto = false;
+                                        break;
+                                    }
+                                break;
+                                case "short":
+                                    switch(cast){
+                                        case "int":
+                                        case "long":
+                                        case "float":
+                                        case "double":
+                                        case "char":
+                                            correcto = false;
+                                        break;
+                                        default:
+                                            correcto = true;
+                                        break;
+                                    }
+                                break;
+                                case "int":
+                                    switch(cast){
+                                        case "long":
+                                        case "float":
+                                        case "double":
+                                            correcto = false;
+                                        break;
+                                        default:
+                                            correcto = true;
+                                        break;
+                                    }
+                                break;
+                                case "long":
+                                    switch(cast){
+                                        case "float":
+                                        case "double":
+                                            correcto = false;
+                                        break;
+                                        default:
+                                            correcto = true;
+                                        break;
+                                    }
+                                break;
+                                case "float":
+                                    switch(cast){
+                                        case "double":
+                                            correcto = false;
+                                        break;
+                                        default:
+                                            correcto = true;
+                                        break;
+                                    }
+                                break;
+                                case "double":
+                                    correcto = true;
+                                break;
+                                case "char":
+                                    switch(cast){
+                                        case "short":
+                                        case "byte":
+                                            correcto = true;
+                                        break;
+                                        default:
+                                            correcto = false;
+                                        break;
+                                    }
+                                break;
+                            }
+                            if(correcto){
+                                String valor = Double.toString(tabla.getVal(idCasteo.image));
+                                tabla.asignar(identificador.image, valor);
+                                System.out.println("CASTEO CORRECTO");
+                            } else {
+                                System.out.println("CASTEO INVALIDO");
+                            }
+                        } else {
+                            System.out.println("EL CASTEO NO SE PUEDE ASIGNAR");
+                        }
+                    } else {
+                        System.out.println("LA VARIABLE "+idCasteo+ " NO SE HA DECLARADO");
+                    }
+                }
+            }
+        }
+    }
+}
+
+void operadorAritmetico() : {} {
+	<OPSUM> {System.out.println("Se encontro un SUMA");}
+	|<OPRES> {System.out.println("Se encontro un RESTA");}
+	|<OPMUL> {System.out.println("Se encontro un MULTIPLICACION");}
+	|<OPDIV> {System.out.println("Se encontro un DIVISION");}
+}
+void modificadorAcceso() : {} {
+	<PRIVADA> {System.out.println("Se encontro modificador de acceso PRIVADA");}
+	|<PUBLICA> {System.out.println("Se encontro modificador de acceso PUBLICA");}
+	|<PROTEGIDA> {System.out.println("Se encontro modificador de acceso PROTEGIDA");}
+}
+
+
+double A() :
+{
+	double val=0, sin=0;
+}
+{
+	val=B() sin=Ap(val) 
+	{
+        System.out.println(sin);
+		return sin;
+	}
+}
+
+double Ap(double her) : //SUMA
+{
+	double val=0, sin=0;
+}
+{
+    [<OPSUM> val=B() sin=Ap(her+val) {return sin;}
+    |<OPRES> val=B() sin=Ap(her-val) {return sin;}] 
+	
+	{
+		return her;
+	}
+}
+
+double B() :
+{
+    double val=0, sin=0;
+}
+{
+    val=F() sin=Bp(val) 
+	{
+		return sin;
+	}
+}
+
+double Bp(double her) : 
+{
+    double val=0, sin=0;
+}
+{
+    [<OPMUL> val=F() sin=Bp(her*val) {return sin;}
+    |<OPDIV> val=F() sin=Bp(her/val) {return sin;}
+    |<OPMOD> val=F() sin=Bp(her%val) {return sin;}
+    |<OPPOT> val=F() sin=Bp((double) Math.pow(her, val)) {return sin;}] 
+	{
+		return her;
+	}
+} 
+
+double F() :
+{
+    Token valor;
+    double val=0;
+}
+{
+    valor=<ENTERO>{val=tabla.getVal(valor.image); return val;} | 
+    valor=<ID>{val=tabla.getVal(valor.image); return val;} | 
+    "(" val=A() ")"
+    {
+        return val;
+    }
+}

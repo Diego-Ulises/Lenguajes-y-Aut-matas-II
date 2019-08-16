@@ -1,0 +1,196 @@
+options {
+LOOKAHEAD=1;
+}
+PARSER_BEGIN(Practica1)
+public class Practica1{
+    public static TablaSimbolos tabla = new TablaSimbolos();
+public static void main(String args[]) throws ParseException {
+	Practica1 miParser = new Practica1(System.in);
+	miParser .listaExpr();
+}
+}
+PARSER_END(Practica1)
+SKIP :{
+	" "
+	| "\t"
+	| "\n"
+	| "\r"
+	| "\u00ef"
+	| "\u00bb"
+	| "\u00bf"
+}
+TOKEN: {
+<TIPO: <INT> | <DOUBLE> | <FLOAT> | <BYTE> | <LONG>> |
+<OPMENI: "<="> |
+<OPMAYI: ">="> |
+<OPMAY: ">"> |
+<OPMEN: "<"> |
+<OPDIF: "!="> |
+<OPNOT: "!"> |
+<OPCOMP: "=="> |
+<OPIG: "="> |
+<INCREMENT: "++"> |
+<OPSUM: "+"> |
+<OPMUL: "*"> |
+<DECREMENT: "--"> |
+<OPRES: "-"> |
+<OPDIV: "/"> |
+<OPMOD: "%"> |
+<OPPOT: "^"> |
+<OPAND: "&&"> |
+<OPOR: "||">
+|<INT:"int">
+|<ABRIRPARENTESIS:"(">
+|<CERRARPARENTESIS:")">
+|<ABRIRLLAVE:"{">
+|<CERRARLLAVE:"}">
+|<SI:"if">
+|<SINO:"else">
+|<MIENTRAS:"while">
+|<HASTAQUE:"for">
+|<HAZ:"do">
+|<CONMUTADOR:"switch">
+|<CASO: "case">
+|<ROMPER:"break">
+|<PORDEFECTO:"default">
+|<CADENA:"string">
+|<VOF:"vof">
+|<RETORNAR:"return">
+|<ESTATICO:"static">
+|<NULO:"null">
+|<PUBLICA:"public">
+|<VACIO:"void">
+|<PRIVADA:"private">
+|<PROTEGIDA:"protected">
+|<ESCIERTO: "true">
+|<ESFALSO: "false">
+|<DOUBLE: "double">
+|<FLOAT: "float">
+|<LONG: "long">
+|<BYTE: "byte">
+|<ID: <LETRA> (<LETRA> | <DIGDEC> | "_")* > 
+|<PC: [";"]>
+|<DOSPUNTOS: [":"]>
+|<ESPACIO: [" "]>
+|<COMILLA: ["'"]>
+|<ENTERO: ("0" | ["1"-"9"](<DIGDEC>)*)>|
+<DIGDEC: ["0"-"9"]>|
+<LETRA: (["a"-"z"]|["A"-"Z"])> |
+<PUNTO: ".">|
+<COMA: ",">
+
+}
+
+void listaExpr() : {} {
+    //(declaracion() | asignacion() )+
+    A()
+}
+void declaracion() :{
+    Token tipo, identificador;
+}{
+    (tipo=<TIPO> identificador=<ID> (<OPIG> A())? (insert())* <PC>) 
+    {
+        if(tabla.existe(identificador.image)){
+            System.out.println("YA SE HA DECLARADO LA VARIABLE "+identificador);
+        }else{
+            tabla.insertar(identificador.image, tipo.image, null, "0");
+        }	
+    }
+}
+void insert() :{
+    Token identificador;
+}{
+    (<COMA> identificador=<ID> (<OPIG> A())?) 
+    {
+        if(tabla.existe(identificador.image)){
+            System.out.println("YA SE HA DECLARADO LA VARIABLE "+identificador);
+        }else{
+            tabla.insertar(identificador.image, null, null, "0");
+        }
+    }	
+}
+void asignacion() :{
+    Token tipo, identificador;
+}{
+    (identificador=<ID> (<OPIG> A())? <PC>)
+    {
+        if(!tabla.existe(identificador.image))
+            System.out.println("LA VARIABLE "+identificador+ " NO SE HA DECLARADO");
+    }
+}
+
+void operadorAritmetico() : {} {
+	<OPSUM> {System.out.println("Se encontro un SUMA");}
+	|<OPRES> {System.out.println("Se encontro un RESTA");}
+	|<OPMUL> {System.out.println("Se encontro un MULTIPLICACION");}
+	|<OPDIV> {System.out.println("Se encontro un DIVISION");}
+}
+void modificadorAcceso() : {} {
+	<PRIVADA> {System.out.println("Se encontro modificador de acceso PRIVADA");}
+	|<PUBLICA> {System.out.println("Se encontro modificador de acceso PUBLICA");}
+	|<PROTEGIDA> {System.out.println("Se encontro modificador de acceso PROTEGIDA");}
+}
+
+
+float A() :
+{
+	float val=0, sin=0;
+}
+{
+	val=B() sin=Ap(val) 
+	{
+        System.out.println(sin);
+		return sin;
+	}
+}
+float Ap(float her) : //SUMA
+{
+	float val=0, sin=0;
+}
+{
+    [<OPSUM> val=B() sin=Ap(her+val) {return sin;}
+    |<OPRES> val=B() sin=Ap(her-val) {return sin;}] 
+	
+	{
+		return her;
+	}
+}
+
+float B() :
+{
+    float val=0, sin=0;
+}
+{
+    val=F() sin=Bp(val) 
+	{
+		return sin;
+	}
+}
+
+float Bp(float her) : 
+{
+    float val=0, sin=0;
+}
+{
+    [<OPMUL> val=F() sin=Bp(her*val) {return sin;}
+    |<OPDIV> val=F() sin=Bp(her/val) {return sin;}
+    |<OPMOD> val=F() sin=Bp(her%val) {return sin;}
+    |<OPPOT> val=F() sin=Bp((float) Math.pow(her, val)) {return sin;}] 
+	{
+		return her;
+	}
+}
+ 
+
+float F() :
+{
+    Token valor;
+    float val=0;
+}
+{
+    //<ENTERO>(<PUNTO><ENTERO>)?| <ID> | "(" sin=A() ")"
+    valor=<ENTERO>{val=Float.valueOf(valor.image); return val;} | "(" val=A() ")"
+    {
+        return val;
+    }
+}
