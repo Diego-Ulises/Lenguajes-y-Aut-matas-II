@@ -1,0 +1,153 @@
+options { 
+  Ignore_Case = false;
+  UNICODE_INPUT = true;
+  JAVA_UNICODE_ESCAPE = false; 
+}
+
+PARSER_BEGIN (Practica3)
+
+//import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+
+public class Practica3 {
+  //Ejecución del analizador
+  public static void main (String[] argum) throws ParseException, UnsupportedEncodingException {
+    //Inicialización del analizador
+    //System.setOut(new PrintStream(System.out, true, "UTF-8"));
+    Practica3 anLexSint = new Practica3 (System.in);
+    anLexSint.expression();
+    System.out.println("");
+    System.out.println("Analisis terminado");
+  }
+}
+
+PARSER_END (Practica3)
+
+//Tokens estáticos
+TOKEN:
+{ 
+  //Letras minusculas
+  <ALPHA: "α" | "ά"> {System.out.print("a");} |
+  <BETA: "β"> {System.out.print("b");} |
+  <GAMMA: "γ"> {System.out.print("g");} |
+  <DELTA: "δ"> {System.out.print("d");} |
+  <EPSILON: "ε" | "έ"> {System.out.print("e");} | 
+  <DSETA: "ζ"> {System.out.print("z");} |
+  <ETA: " η" | "ή"> {System.out.print("i");} |
+  <THETA: "θ"> {System.out.print("th");} |
+  <IOTA: " ι" | "ί" | "ϊ" > {System.out.print("i");} |
+  <KAPPA: "κ"> {System.out.print("k");} |
+  <LAMBDA: "λ"> {System.out.print("l");} |
+  <MI: "μ"> {System.out.print("m");} |
+  <NI: "ν"> {System.out.print("n");} |
+  <XI: "ξ"> {System.out.print("x");} |
+  <OMICRON: "ο" | "ό" > {System.out.print("o");} |
+  <PI: "π"> {System.out.print("p");} |
+  <RHO: "ρ"> {System.out.print("r");} |
+  <SIGMA: "σ"|"ς"> {System.out.print("s");} |
+  <TAU: "τ"> {System.out.print("t");} |
+  <IPSILON: "υ" | "ΰ" | "ϋ" | "ύ"> {System.out.print("y");} |
+  <FI: "φ"> {System.out.print("f");} |
+  <JI: "χ"> {System.out.print("ch");} |
+  <PSI: "ψ"> {System.out.print("ps");} |
+  <OMEGA: "ω" | "ώ"> {System.out.print("o");} |
+  //Letras mayusculas
+  <ALPHAMAYUSCULA: "Α" | "Ά"> {System.out.print("A");} |
+  <BETAMAYUSCULA: " Β"> {System.out.print("B");} |
+  <GAMMAMAYUSCULA: "Γ"> {System.out.print("G");} |
+  <DELTAMAYUSCULA: "Δ"> {System.out.print("D");} |
+  <EPSILONMAYUSCULA: "Ε" | "Έ"> {System.out.print("E");} |
+  <DSETAMAYUSCULA: "Ζ"> {System.out.print("Z");} |
+  <ETAMAYUSCULA: "Η" | "Ή"> {System.out.print("I");} |
+  <THETAMAYUSCULA: "Θ"> {System.out.print("TH");} |
+  <IOTAMAYUSCULA: "Ι" | "Ί" | "ΐ" | "Ϊ" > {System.out.print("I");} |
+  <KAPPAMAYUSCULA: "Κ"> {System.out.print("K");} |
+  <LAMBDAMAYUSCULA: "Λ"> {System.out.print("L");} |
+  <MIMAYUSCULA: "Μ"> {System.out.print("M");} |
+  //<NIMAYUSCULA: "Ν"> {System.out.print("N");} |
+  <XIMAYUSCULA: "Ξ"> {System.out.print("X");} |
+  <OMICRONMAYUSCULA: "Ο" | "Ό"> {System.out.print("O");} |
+  <PIMAYUSCULA: "Π"> {System.out.print("P");} |
+  <RHOMAYUSCULA: "Ρ"> {System.out.print("R");} |
+  <SIGMAMAYUSCULA: "Σ"> {System.out.print("S");} |
+  <TAUMAYUSCULA: "Τ"> {System.out.print("T");} |
+  <IPSILONMAYUSCULA: "Υ" | "Ύ" | "Ϋ" | "ϓ" | "ϔ"> {System.out.print("Y");} |
+  <FIMAYUSCULA: "Φ"> {System.out.print("F");} |
+  <JIMAYUSCULA: " Χ"> {System.out.print("CH");} |
+  <PSIMAYUSCULA: "Ψ"> {System.out.print("PS");} |
+  <OMEGAMAYUSCULA: "Ω" | "Ώ"> {System.out.print("O");} |
+  //A español de griego
+  //Letras minusculas
+  <LATINALPHA: "a"> {System.out.print("α");} |
+  <LATINBETA: "b" | "v"> {System.out.print("β");} |
+  <LATINGAMMA: "g"> {System.out.print("γ");} |
+  <LATINDELTA: "d"> {System.out.print("δ");} |
+  <LATINEPSILON: "e"> {System.out.print("ε");} | 
+  <LATINDSETA: "z"> {System.out.print("ζ");} |
+  <LATINETA: "i"> {System.out.print("η");} |
+  <LATINTHETA: "th"> {System.out.print("θ");} |
+  <LATINKAPPA: ("k" | "q")> {System.out.print("κ");} |
+  <LATINLAMBDA: "l"> {System.out.print("λ");} |
+  <LATINMI: "m"> {System.out.print("μ");} |
+  <LATINNI: "n"> {System.out.print("ν");} |
+  <LATINXI: "x"> {System.out.print("ξ");} |
+  <LATINPI: "p"> {System.out.print("π");} |
+  <LATINRHO: "r"> {System.out.print("ρ");} |
+  <LATINSIGMA: "s"> {System.out.print("σ");} |
+  <LATINTAU: "t"> {System.out.print("τ");} |
+  <LATINIPSILON: "y"> {System.out.print("υ");} |
+  <LATINFI: "f"> {System.out.print("φ");} |
+  <LATINJI: "ch"> {System.out.print("χ");} |
+  <LATINPSI: "ps"> {System.out.print("ψ");} |
+  <LATINOMEGA: "o"> {System.out.print("ω");} |
+  //Letras mayusculas
+  <LATINALPHAMAYUSCULA: "A"> {System.out.print("Α");} |
+  <LATINBETAMAYUSCULA: "B" | "V"> {System.out.print("Β");} |
+  <LATINGAMMAMAYUSCULA: "G"> {System.out.print("Γ");} |
+  <LATINDELTAMAYUSCULA: "D"> {System.out.print("Δ");} |
+  <LATINEPSILONMAYUSCULA: "E"> {System.out.print("Ε");} |
+  <LATINDSETAMAYUSCULA: "Z"> {System.out.print("Ζ");} |
+  <LATINETAMAYUSCULA: "I"> {System.out.print("Η");} |
+  <LATINTHETAMAYUSCULA: "TH"> {System.out.print("Θ");} |
+  <LATINKAPPAMAYUSCULA: ("K" | "Q")> {System.out.print("Κ");} |
+  <LATINLAMBDAMAYUSCULA: "L"> {System.out.print("Λ");} |
+  <LATINMIMAYUSCULA: "M"> {System.out.print("Μ");} |
+  <LATINNIMAYUSCULA: "N"> {System.out.print("Ν");} |
+  <LATINXIMAYUSCULA: "X"> {System.out.print("Ξ");} |
+  <LATINPIMAYUSCULA: "P"> {System.out.print("Π");} |
+  <LATINRHOMAYUSCULA: "R"> {System.out.print("Ρ");} |
+  <LATINSIGMAMAYUSCULA: "S"> {System.out.print("Σ");} |
+  <LATINTAUMAYUSCULA: "T"> {System.out.print("Τ");} |
+  <LATINIPSILONMAYUSCULA: "Y"> {System.out.print("Υ");} |
+  <LATINFIMAYUSCULA: "F"> {System.out.print("Φ");} |
+  <LATINJIMAYUSCULA: "CH"> {System.out.print("Χ");} |
+  <LATINPSIMAYUSCULA: "PS"> {System.out.print("Ψ");} |
+  <LATINOMEGAMAYUSCULA: "O"> {System.out.print("Ω");} |
+
+  <PUNTO: "."> {System.out.print(".");} |
+  //Espacio
+  <SALTO: "\n"> {System.out.print("\n");} |
+  <ESPACIO: " "> {System.out.print(" ");} 
+}
+
+//Estructuras y caracteres de escape
+SKIP:
+{"\t" | "\r" | "ʹ" | "͂ " | "̓ " | "̈́ " | "ͅ" | "͵" | "ͺ" | ";" | "΄" | "΅" | "·" | "\u00b9" | "\u00ce" | "\u00b7" |
+ "j" | "J" | "H" | "h" | "c" | "C" | "u" | "U" | "0" | "1" | "2" |"3" |"4" |"5"|"6" |"7" |"8" |"9" | "-"}
+
+//Unidad principal
+void expression() : {}
+{
+  (<SALTO>|<ESPACIO>|<ALPHA>|<BETA>|<GAMMA>|<DELTA>|<EPSILON>|<DSETA>|<ETA>|<THETA>|<IOTA>|<KAPPA>|<LAMBDA>|<PUNTO>|
+    <MI>|<NI>|<XI>|<OMICRON>|<PI>|<RHO>|<SIGMA>|<TAU>|<IPSILON>|<FI>|<JI>|<PSI>|<OMEGA>|
+    <ALPHAMAYUSCULA>|<BETAMAYUSCULA>|<GAMMAMAYUSCULA>|<DELTAMAYUSCULA>|<EPSILONMAYUSCULA>|<DSETAMAYUSCULA>|
+    <ETAMAYUSCULA>|<THETAMAYUSCULA>|<IOTAMAYUSCULA>|<KAPPAMAYUSCULA>|<LAMBDAMAYUSCULA>|
+    <MIMAYUSCULA>|<XIMAYUSCULA>|<OMICRONMAYUSCULA>|<PIMAYUSCULA>|<RHOMAYUSCULA>|
+    <SIGMAMAYUSCULA>|<TAUMAYUSCULA>|<IPSILONMAYUSCULA>|<FIMAYUSCULA>|<JIMAYUSCULA>|<PSIMAYUSCULA>|<OMEGAMAYUSCULA>|
+    <LATINALPHA>|<LATINBETA>|<LATINGAMMA>|<LATINDELTA>|<LATINEPSILON>|<LATINDSETA>|<LATINETA>|<LATINTHETA>|<LATINKAPPA>|<LATINLAMBDA>|
+    <LATINMI>|<LATINNI>|<LATINXI>|<LATINPI>|<LATINRHO>|<LATINSIGMA>|<LATINTAU>|<LATINIPSILON>|<LATINFI>|<LATINJI>|<LATINPSI>|<LATINOMEGA>|
+    <LATINALPHAMAYUSCULA>|<LATINBETAMAYUSCULA>|<LATINGAMMAMAYUSCULA>|<LATINDELTAMAYUSCULA>|<LATINEPSILONMAYUSCULA>|<LATINDSETAMAYUSCULA>|
+    <LATINETAMAYUSCULA>|<LATINTHETAMAYUSCULA>|<LATINKAPPAMAYUSCULA>|<LATINLAMBDAMAYUSCULA>|
+    <LATINMIMAYUSCULA>|<LATINXIMAYUSCULA>|<LATINPIMAYUSCULA>|<LATINRHOMAYUSCULA>|
+    <LATINSIGMAMAYUSCULA>|<LATINTAUMAYUSCULA>|<LATINIPSILONMAYUSCULA>|<LATINFIMAYUSCULA>|<LATINJIMAYUSCULA>|<LATINPSIMAYUSCULA>|<LATINOMEGAMAYUSCULA>)+ <EOF>
+}

@@ -1,0 +1,119 @@
+options {
+LOOKAHEAD=1;
+}
+PARSER_BEGIN(Ejemplo)
+public class Ejemplo{
+public static void main(String args[]) throws ParseException {
+	Ejemplo miParser = new Ejemplo(System.in);
+	miParser .listaExpr();
+}
+}
+PARSER_END(Ejemplo)
+SKIP :{
+	"b ¯& "
+	| "\t"
+	| "\n"
+	| "\r"
+}
+TOKEN [IGNORE_CASE] : {
+<MAS: "+">
+|<INCREMENTO:"++">
+|<MENOS: "-">
+|<DECREMENTO:"--">
+|<POR:"*">
+|<ENTRE:"/">
+|<ABRIRPARENTESIS:"(¡">
+|<CERRARPARENTESIS:"!)">
+|<ABRIRLLAVE:"{">
+|<CERRARLLAVE:"}">
+|<OPMAYOR: [">"]>
+|<OPMENOR: ["<"]>
+|<OPIGUAL: ["="]>
+|<SI:"si">
+|<SINO:"sino">
+|<MIENTRAS:"mientras">
+|<HASTAQUE:"hastaque">
+|<HAZ:"haz">
+|<CONMUTADOR:"conmutador">
+|<CASO: "caso">
+|<ROMPER:"romper">
+|<PORDEFECTO:"pordefecto">
+|<ENTERO:"entero">
+|<CADENA:"cadena">
+|<VOF:"vof">
+|<RETORNAR:"retornar">
+|<ESTATICO:"estatico">
+|<NULO:"nulo">
+|<PUBLICA:"publica">
+|<VACIO:"vacio">
+|<PRIVADA:"privada">
+|<PROTEGIDA:"protegida">
+|<ID:(["a"-"z"])+>
+|<NUMERO: (["0"-"9"])+>
+|<OPERACION: ((["a"-"z"])+)";">
+|<PC: [";"]>
+|<DOSPUNTOS: [":"]>
+|<ESPACIO: [" "]>
+|<ESCIERTO: "escierto">
+|<ESFALSO: "esfalso">
+|<COMILLA: ["'"]>
+}
+
+void listaExpr() : {} {
+	(exp())+
+}
+void exp() :{}{ LOOKAHEAD(2)
+	<MIENTRAS> <ABRIRPARENTESIS> condicion() <CERRARPARENTESIS> <ABRIRLLAVE> sentencias() <CERRARLLAVE> {System.out.println("Se encontro MIENTRAS");}
+	
+	|<SI> <ABRIRPARENTESIS> condicion() <CERRARPARENTESIS> <ABRIRLLAVE> <OPERACION> <CERRARLLAVE> (siNo())? {System.out.println("Se encontro SI");} 
+	
+	|<HASTAQUE> <ABRIRPARENTESIS> <ENTERO> <ESPACIO> <ID> <OPIGUAL> <NUMERO> <PC> <ESPACIO> condicion() <PC> <ESPACIO> <ID> cremento()<CERRARPARENTESIS> 
+	<ABRIRLLAVE> sentencias() <CERRARLLAVE> {System.out.println("Se encontro HASTAQUE");}
+
+	|<HAZ> <ABRIRLLAVE> sentencias() <CERRARLLAVE> <MIENTRAS> <ABRIRPARENTESIS> condicion() <CERRARPARENTESIS> <PC> 
+	{System.out.println("Se encontro HAZ MIENTRAS");}
+	
+	|<CONMUTADOR> <ABRIRPARENTESIS> <ID> <CERRARPARENTESIS> <ABRIRLLAVE> (casos())+ <PORDEFECTO> <DOSPUNTOS> sentencias() <ROMPER> <DOSPUNTOS> 
+	{System.out.println("Se encontro un CONMUTADOR");}
+
+	| (modificadorAcceso() <ESPACIO>)? tipoDato() <ESPACIO> <ID> (<OPIGUAL> valor())? <DOSPUNTOS> 
+	
+}
+
+void modificadorAcceso() : {} {
+	<PRIVADA> {System.out.println("Se encontro modificador de acceso PRIVADA");}
+	|<PUBLICA> {System.out.println("Se encontro modificador de acceso PUBLICA");}
+	|<PROTEGIDA> {System.out.println("Se encontro modificador de acceso PROTEGIDA");}
+}
+void tipoDato() : {} {
+	<ENTERO> {System.out.println("Se encontro un ENTERO");}
+	|<CADENA> {System.out.println("Se encontro una CADENA");}
+	|<VOF> {System.out.println("Se encontro un BOOLEANO");}
+}
+void sentencias() : {} {
+	<OPERACION>
+	| (exp())+
+}
+void condicion() : {} {
+	(valor() operadorlogico() valor() {System.out.println("Se encontro una CONDICION");})
+}
+void valor() : {}{ LOOKAHEAD(1)
+	<ID> {System.out.println("Se encontro un ID");} 
+	|<NUMERO> {System.out.println("Se encontro un NUMERO");}
+	|<ESCIERTO> | <ESFALSO> {System.out.println("Se encontro un OPERADOR BOOLEANO");}
+	| <COMILLA> valor() <COMILLA> {System.out.println("Se encontro una CADENA");}
+	| <NULO> {System.out.println("Se encontro NULO");}
+}
+void operadorlogico() : {}{ LOOKAHEAD(1)
+	<OPMAYOR> | <OPMENOR> | <OPIGUAL> {System.out.println("Se encontró un OPERADOR LOGICO");}	
+}
+void siNo() :{} {
+	<SINO> <ABRIRLLAVE> <OPERACION> <CERRARLLAVE> {System.out.println("Se encontro SI NO");}
+}
+void casos() : {}{
+	<CASO> <ESPACIO> valor() <DOSPUNTOS> sentencias() <ROMPER> <DOSPUNTOS> {System.out.println("Se encontro un CASO");}
+}
+void cremento() : {}{ LOOKAHEAD(1)
+	<INCREMENTO> {System.out.println("Se encontro un INCREMENTO");} 
+	|<DECREMENTO> {System.out.println("Se encontro un DECREMENTO");} 
+}

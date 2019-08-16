@@ -1,0 +1,5 @@
+si(¡a>10!){
+sentencias;
+}sino{
+sentencias;
+}

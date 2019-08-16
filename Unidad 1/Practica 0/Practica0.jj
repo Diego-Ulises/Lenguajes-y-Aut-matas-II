@@ -1,0 +1,29 @@
+options { Ignore_Case = false; }
+
+PARSER_BEGIN (Practica0)
+public class Practica0 {
+  public static void main (String[] argum) throws ParseException {
+    Practica0 anLexSint = new Practica0 (System.in);
+    anLexSint.expression();
+    System.out.println("Análisis terminado");
+  }
+}
+
+PARSER_END (Practica0)
+TOKEN:
+{
+  <OPSUMA: "+"> |
+  <LETRAMIN: ["a"-"z"]> |
+  <NUM: ["0"-"9"]>
+}
+
+SKIP:
+{ " " | "\t" | "\n" | "\r" }
+
+void expression() : {}
+{
+  //(<OPSUMA> | <LETRAMIN> | <NUM>)+ <EOF>
+  (<LETRAMIN><LETRAMIN><NUM><NUM><NUM><OPSUMA><NUM>) <EOF>
+}
+
+

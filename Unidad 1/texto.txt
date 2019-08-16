@@ -1,0 +1,52 @@
+si(¡a>10!){
+sentencias;
+}sino{
+sentencias;
+}
+
+entero y=100:
+cadena cad='hola':
+vof booleano=escierto:
+entero x:
+cadena string:
+vof bool:
+
+protegida entero x=nulo:
+publica cadena string:
+privada vof bool:
+
+si(¡a>10!){
+sentencias;
+}
+
+hastaque(¡entero a=0; a<10; a++!){
+sentencias;
+}
+
+mientras(¡1<a!){
+sentencias;
+}
+
+haz{
+sentencias;
+}mientras(¡x>5!);
+
+conmutador(¡opcion!){
+caso 1:
+sentencias;
+romper:
+caso 2:
+sentencias;
+romper:
+pordefecto:
+sentencias;
+romper:
+}
+conmutador(¡opcion!){
+caso 1:
+sentencias;
+romper:
+pordefecto:
+sentencias;
+romper:
+}

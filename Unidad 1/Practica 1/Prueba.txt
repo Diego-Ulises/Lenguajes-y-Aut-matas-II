@@ -1,0 +1,44 @@
+var43
+a
+char
+Z
+10
+()
+{}
+B0101
+O7045
+0x45A3
+var1
++
+/
+byte identificador0_1
+short
+char
+boolean
+
+B
+
+OB09
+
+0xB01
+
+(identificador)
+
+
+int int B01
+
+{ var_123aaaa }/12
+B0001-(10+O77)
+0xFa1^x1
+a*b
+var5/var4
+
+m
+int ab1_prueba
+byte B10010
+{
+(
+funcion
+)
+}
+

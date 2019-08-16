@@ -1,0 +1,3 @@
+javacc Nombre.jj
+javac *.java
+java Nombre < prueba.txt

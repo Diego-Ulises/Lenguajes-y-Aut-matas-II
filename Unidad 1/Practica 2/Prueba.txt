@@ -1,0 +1,58 @@
+# Python program to check if the input number is odd or even.
+# A number is even if division by 2 give a remainder of 0.
+# If remainder is 1, it is odd number.
+
+num = int(input("Enter a number: "))
+if (num % 2) == 0:
+   print("{0} is Even".format(num))
+else:
+   print("{0} is Odd".format(num))
+
+
+class InputOutString(object):
+    def __init__(self):
+        self.s = ""
+
+    def getString(self):
+        self.s = raw_input()
+
+    def printString(self):
+        print self.s.upper()
+
+strObj = InputOutString()
+strObj.getString()
+strObj.printString()
+
+# Python 3: Fibonacci series up to n
+def fib(n):
+    a, b = 0, 1
+    while a < n:
+        print(a, end=' ')
+        a, b = b, a+b
+    print()
+fib(1000)
+
+### Introducir un nuumero por teclado y decir si es par o impar
+h = input('Introduzca un numero: ')
+if h%2 == 0:
+    print 'Este numero es par'
+else:
+    print 'Este numero es impar'
+
+##Introducir los valores A, B y C: 
+###Si A/B>30, calcular e imprimir A/C * B^3 
+###Si A/B<=30, calcular e imprimir 2^2+4^2+6^2+...+30^2
+a = input('Primer valor: ')
+b = input('Segundo valor: ')
+c = input('Tercer valor: ')
+n = 2
+suma = 0
+sumas = 0
+if a/b > 30:
+    suma = a/c*b**3
+    print suma
+if a/b <= 30:
+    while n <= 30:
+        sumas += n**2
+        n += 2
+    print sumas    

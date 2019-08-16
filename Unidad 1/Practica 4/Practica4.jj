@@ -1,0 +1,122 @@
+options { Ignore_Case = false; }
+
+PARSER_BEGIN (Practica4)
+public class Practica4 {
+  //Ejecución del analizador
+  public static void main (String[] argum) throws ParseException {
+    //Inicialización del analizador
+    Practica4 anLexSint = new Practica4 (System.in);
+    anLexSint.expression();
+    System.out.print("Analisis terminado");
+  }
+}
+
+PARSER_END (Practica4)
+
+//Tokens estáticos
+TOKEN:
+{ 
+  //MEXICANAS
+  <CABRON: <C><A><B><R><O><N> > {System.out.print("****");} |
+  <PINCHE: <P><I><N><C><H><E> >  {System.out.print("****");} |
+  <PUTO: <P><U><T><O> | <P><U><T><E><A> >  {System.out.print("****");} |
+  <MARICON: <M><A><R><I><C><O><N> >  {System.out.print("****");} |
+  <JOTO: <J><O><T><O> >  {System.out.print("****");} |
+  <IDIOTA: <I><D><I><O><T><A> >  {System.out.print("****");} |
+  <ESTUPIDO: <E><S><T><U><P><I><D>(<O>|<A>) >  {System.out.print("****");} |
+  <MAMES: <M><A><M><E><S> >  {System.out.print("****");} |
+  <CHINGA: <C><H><I><N><G><A> >  {System.out.print("****");} |
+  <VERGA: <V><E><R><G><A> >  {System.out.print("****");} |
+  <WEY: (<W>|((<G>|<B>)<U>))<E><Y> >  {System.out.print("****");} |
+  <MIERDA: <M><I><E><R><D><A> >  {System.out.print("****");} |
+  <CAGO: <C><A><G>(<O>|<A>) >  {System.out.print("****");} |
+  <BABOSO: <B><A><B><O><S>(<O>|<A>) >  {System.out.print("****");} |
+  <TARADO: <T><A><R><A><D>(<O>|<A>) >  {System.out.print("****");} |
+  <MAMON: <M><A><M><O><N> >  {System.out.print("****");} |
+  <PEDO: <P><E><D><O> >  {System.out.print("****");} |
+  <CULO: <C><U><L>(<A>|<O>|<E>(<A>|<R><O>))>  {System.out.print("****");} |
+  <TETAS: <T><E><T><A><S> >  {System.out.print("****");} |
+  <PUERCO: <P><U><E><R><C><O> >  {System.out.print("****");} |
+  <PITO: <P><I><T><O> >  {System.out.print("****");} |
+  <CHOSTO: <C><H><O><S><T><O> >  {System.out.print("****");} |
+  <PENDEJO: <P><E><N><D><E><J>(<O>|<A>) >  {System.out.print("****");} |
+  <ZORRA: <Z><O><R><R><A> >  {System.out.print("****");} |
+  <COCHO: <C><O><C><H><O> >  {System.out.print("****");} |
+  <IMBECIL: <I><M><B><E><C><I><L> >  {System.out.print("****");} |
+
+  //ESPAÑOLAS
+  <CONO: <C><O><NI><O>>  {System.out.print("****");} |
+  <FOLLO: <F><O><L><L>(<O>|<A>)>  {System.out.print("****");} |
+  <HOSTIA: (<H>)?<O><S><T><I><A> >  {System.out.print("****");} |
+  <COJON: <C><O><J><O><N> >  {System.out.print("****");} |
+  <POLLA: <P><O><Y><A> >  {System.out.print("****");} |
+  <CONCHA: <C><O><N><C><H>(<A>|<E>) >  {System.out.print("****");} |
+  <JOLIN: <J><O><L><I><N> >  {System.out.print("****");} |
+  <PRINGADO: <P><R><I><N><G><A><D><O> >  {System.out.print("****");} |
+
+
+  //COLOMBIANAS
+  <HUEVON: <H><U><E><V><O><N> >  {System.out.print("****");} |
+  <MONGOL: <M><O><N><G><O><L> >  {System.out.print("****");} |
+  <GONORREA: <G><O><N><O><R><R><E><A>>  {System.out.print("****");} |
+  <RAMERA: <R><A><M><E><R><A> >  {System.out.print("****");} |
+  <MALPARIDO: <M><A><L><P><A><R><I><D>(<A>|<O>) >  {System.out.print("****");} |
+  <MONDA: <M><O><N><D><A> >  {System.out.print("****");} |
+  <CHIMBA: <C><H><I><M><B><A> >  {System.out.print("****");} |
+
+  <CADENA: (["A"-"Z"] | ["a"-"z"] | ["0"-"9"] | "!" | "#" | "$" | "%" | "&" | ";" | ":" | "/" | "(" | ")" | "=" | "?" | "¡" | "¿" | "'"|"["|"]"|"{"|"}"|"+"|"<"|">")+>{System.out.print("PALABRA");} |
+  
+  //Letras
+  <A:"A"|"a"|"Á"|"á"|"@"|"*"|"X"|"x"|"4"> {System.out.print("*");} |
+  <B:"B"|"b"|"8"|"v"|"V">{System.out.print("*");} |
+  <C:"C"|"c"|"("|"Q"|"q"|"K"|"k"|"<">{System.out.print("*");} |
+  <D:"D"|"d"|")"|"]"|"}">{System.out.print("*");} |
+  <E:"E"|"e"|"É"|"é"|"3"> {System.out.print("*");} |
+  <F:"F"|"f">{System.out.print("*");} |
+  <G:"G"|"g">{System.out.print("*");} |
+  <H:"H"|"h">{System.out.print("*");} |
+  <I:"I"|"Í"|"i"|"í"|"|"|"l"|"1"|"/"|"¡"|"!"|"Y"|"y"> {System.out.print("*");} |
+  <J:"J"|"j"|","|";"|"I"|"Í"|"i"|"í"|"|"|"l"|"1"|"/"|"¡"|"!"|";"|":">{System.out.print("*");} |
+  <K:"C"|"c"|"("|"Q"|"q"|"K"|"k">{System.out.print("*");} |
+  <L: "l"|"L"|"I"|"Í"|"i"|"í"|"|"|"l"|"1"|"/"|"¡"|"!">{System.out.print("*");} |
+  <M:"M"|"m"| "N"|"n">{System.out.print("*");} |
+  <N:"N"|"n" | "M"|"m">{System.out.print("*");} |
+  <NI:"Ñ"|"ñ">{System.out.print("*");} |
+  <O:"O"|"Ó"|"o"|"ó"|"0"|"Q"|"q"|"#"|"*"|"X"|"x"|"()"|"[]"|"<>"|"°"> {System.out.print("*");} |
+  <P:"P"|"p">{System.out.print("*");} |
+  <Q:"C"|"c"|"("|"Q"|"q"|"K"|"k"|"*">{System.out.print("*");} |
+  <R:"R"|"r">{System.out.print("*");} |
+  <S:"S"|"s"|"$"|"Z"|"z"|"5">{System.out.print("*");} |
+  <T:"T"|"t"|"7"|"+">{System.out.print("*");} |
+  <U:"U"|"Ú"|"u"|"ú"|"v"|"V"|"W"|"w"> {System.out.print("*");} |
+  <V:"U"|"Ú"|"u"|"ú"|"v"|"V"|"W"|"w">{System.out.print("*");} |
+  <W:"W"|"w"|"U"|"Ú"|"u"|"ú"|"v"|"V">{System.out.print("*");} |
+  <X:"X"|"x"|"><">{System.out.print("*");} |
+  <Y:"Y"|"y"|"I"|"Í"|"i"|"í"|"|"|"l"|"1"|"/"|"¡"|"!"|"Y"|"y"|(<L><L>)>{System.out.print("*");} |
+  <Z:"Z"|"z"|"S"|"s"|"$"|"5">{System.out.print("*");} |
+
+  <PUNTO: "."> {System.out.print(".");} |
+  <SALTO: "\n"> {System.out.print("\n");} |
+  <ESPACIO: " "> {System.out.print(" ");} 
+}
+
+//Estructuras y caracteres de escape
+SKIP:
+{ "\t" | "\r" }
+
+//Unidad principal
+void expression() : {}
+{
+  (<A>|<B>|<C>|<D>|<E>|<F>|<G>|<H>|<I>|<J>|<K>|<L>|<M>|<N>|<O>|<P>|<Q>|<R>|<S>|<T>|<U>|<V>|<W>|<X>|<Y>|<Z>|
+  <PINCHE>|<PUTO>|<MARICON>|<JOTO>|<IDIOTA>|<ESTUPIDO>|<MAMES>|<CHINGA>|<VERGA>|<WEY>|<MIERDA>|<CAGO>|<BABOSO>|
+  <TARADO>|<MAMON>|<PEDO>|<CULO>|<TETAS>|<PUERCO>|<PITO>|<CHOSTO>|<PENDEJO>|<ZORRA>|<CABRON>|<COCHO>|<IMBECIL>|
+  <CONO>|<FOLLO>|<HOSTIA>|<COJON>|<POLLA>|<CONCHA>|<JOLIN>|<PRINGADO>|<HUEVON>|<MONGOL>|<GONORREA>|<RAMERA>|
+  <MALPARIDO>|<MONDA>|<CHIMBA>|<CADENA>|<PUNTO>|<SALTO>|<ESPACIO>)+ <EOF>
+}
+
+
+
+
+
+
+

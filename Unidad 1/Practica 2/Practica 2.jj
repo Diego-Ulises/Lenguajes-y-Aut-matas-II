@@ -1,0 +1,76 @@
+options { Ignore_Case = false; }
+
+PARSER_BEGIN (Practica2)
+public class Practica2 {
+  //Ejecución del analizador
+  public static void main (String[] argum) throws ParseException {
+    //Inicialización del analizador
+    Practica2 anLexSint = new Practica2 (System.in);
+    anLexSint.expression();
+    System.out.println("Analisis terminado");
+  }
+}
+
+PARSER_END (Practica2)
+
+//Tokens estáticos
+TOKEN:
+{ 
+  <RESERVADA: ("and" | "as" | "assert" | "async" |"await" |"break" |"class" |"continue" |"def" |"del" |"elif" |"else" |"except" |"exec" |
+    "False" |"finally" |"for" |"from" |"global" |"if" | "object" | "self" |"import" |"in" |"is" | "int" |"lambda" |"None" |"nonlocal" |
+    "not" |"or" |"pass" |"print" | "raise" |"return" |"True" |"try" |"while" |"with" |"yield") >  {System.out.println("Palabra reservada");} |
+  <TIPOS: "int" | "float" | "complex" | "bool" | "str" | "type" | "format" > {System.out.println("Nombre de funcion");} |
+  <CADENA: ("\""(~["\r"])*"\"" | "\'"(~["\r"])*"\'")> {System.out.println("Cadena");}|
+  <BINARIO: "0b"(["0"-"1"])+> {System.out.println("Binario");}|
+  <CONSTRUCTOR: "__init__"> {System.out.println("Definicion de constructor");}|
+  <OCTAL: "0o"(["0"-"7"])+> {System.out.println("Octal");} |
+  <HEX: "0x"(<NUM>| ["A"-"F"]| ["a"-"f"])+> {System.out.println("Hexadecimal");} |
+  <SALTO:"\n"> {System.out.println("Salto de linea");} |
+  <COMENTARIO: "#"(~["\r", "\n"])*> {System.out.println("Comentario");}|
+  <NUM:  (["0"-"9"])+> {System.out.println("Numero");} |
+  <ID: (<LETRAMIN>|<LETRAMAY>)(<LETRAMIN>|<LETRAMAY>|["0"-"9"]|"_"){0,63}> {System.out.println("Identificador");} |
+  <LETRAMIN: ["a"-"z"]> {System.out.println("Letra Minuscula");} |
+  <LETRAMAY: ["A"-"Z"]> {System.out.println("Letra Mayuscula");} |
+  <GUION: "_"> {System.out.println("Guion bajo");} |
+  <ABRIRPARENTESIS:"("> {System.out.println("Abrir Parentesis");} |
+  <CERRARPARENTESIS:")"> {System.out.println("Cerrar Parentesis");} |
+  <ABRIRCOR:"["> {System.out.println("Abrir CORCHETES");} |
+  <CERRARCOR:"]"> {System.out.println("Cerrar CORCHETES");} |
+  <ABRIRLLAVE:"{"> {System.out.println("Abrir Llave");} |
+  <CERRARLLAVE:"}"> {System.out.println("Cerrar Llave");} |
+  <COMPARACION: "=="> {System.out.println("Operador comparacion");} |
+  <ASIGNACION: "="> {System.out.println("Operador asignacion");} |
+  <OPSUMA: "+"> {System.out.println("Operador Suma");} |
+  <OPRESTA: "-"> {System.out.println("Operador Resta");} |
+  <OPPOTENCIA:"**"> {System.out.println("Operador Potencia");} |
+  <OPMULTIPLICACION:"*"> {System.out.println("Operador multiplicacion");} |
+  <NEGACION:"!"> {System.out.println("Operador negacion");} |
+  <OPLOGAND:"&"> {System.out.println("Operador logico AND");} |
+  <OPLOGOR:"|"> {System.out.println("Operador logico OR");} |
+  <OPLOGXOR:"^"> {System.out.println("Operador logico XOR");} |
+  <OPDIVISION:"/"> {System.out.println("Operador Division");} |
+  <DP: ":"> {System.out.println("Dos Puntos");} |
+  <PUNTO: "."> {System.out.println("Punto");} |
+  <OPMODULO: "%"> {System.out.println("Operador modulo");} |
+  <COMA: ","> {System.out.println("Coma");} |
+  <MOVDER: ">>"> {System.out.println("Mover bits a la derecha");} |
+  <MOVIZQ: "<<"> {System.out.println("Mover bits a la izquierda");} |
+  <MAYORQUE: ">"> {System.out.println("Mayor que");} |
+  <MENORQUE: "<"> {System.out.println("Menor que");} |
+  <TABULADOR:"\t"> {System.out.println("Tabulador");} 
+
+
+}
+
+//Estructuras y caracteres de escape
+SKIP:
+{ " " | "\r"}
+
+//Unidad principal
+void expression() : {}
+{
+  (<CONSTRUCTOR>|<BINARIO>|<OCTAL>|<HEX>|<TIPOS>|<OPLOGAND>|<OPLOGOR>|<OPLOGXOR>|<DP>|<MAYORQUE>|<MENORQUE>|
+    <PUNTO>|<OPMODULO>|<COMA>|<RESERVADA>|<COMENTARIO>|<ID>|<NUM>|<LETRAMIN>|<LETRAMAY>|<ABRIRPARENTESIS>|
+    <CERRARPARENTESIS>|<ABRIRLLAVE>|<CERRARLLAVE>|<OPSUMA>|<OPRESTA>|<OPPOTENCIA>|<NEGACION>|<OPMULTIPLICACION>|
+    <OPDIVISION>|<GUION>|<SALTO>|<TABULADOR>|<COMPARACION>|<ASIGNACION>|<CADENA>|<ABRIRCOR>|<CERRARCOR>)+ <EOF>
+}

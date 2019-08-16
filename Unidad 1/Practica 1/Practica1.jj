@@ -1,0 +1,49 @@
+options { Ignore_Case = false; }
+
+PARSER_BEGIN (Practica1)
+public class Practica1 {
+  //Ejecución del analizador
+  public static void main (String[] argum) throws ParseException {
+    //Inicialización del analizador
+    Practica1 anLexSint = new Practica1 (System.in);
+    anLexSint.expression();
+    System.out.println("Analisis terminado");
+  }
+}
+
+PARSER_END (Practica1)
+
+//Tokens estáticos
+TOKEN:
+{ 
+  <NUM:  (["0"-"9"])+> {System.out.println("Numero");} |
+  <TIPODEDATO: "byte"|"short"|"int"|"long"|"float"|"double"|"char"|"boolean"> {System.out.println("Tipo de Dato");} |
+  <BINARIO: "B"(["0"-"1"])+> {System.out.println("Binario");} |
+  <OCTAL: "O"(["0"-"7"])+> {System.out.println("Octal");} |
+  <HEX: "0x"(<NUM>| ["A"-"F"]| ["a"-"f"])+> {System.out.println("Hexadecimal");} |
+  <VAR: (<LETRAMIN>|<LETRAMAY>)(<LETRAMIN>|<LETRAMAY>|["0"-"9"]|"_"){0,63}> {System.out.println("Identificador Variable");} |
+  <LETRAMIN: ["a"-"z"]> {System.out.println("Letra Minuscula");} |
+  <LETRAMAY: ["A"-"Z"]> {System.out.println("Letra Mayuscula");} |
+  <GUION: "_"> {System.out.println("Guion bajo");} |
+  <ABRIRPARENTESIS:"("> {System.out.println("Abrir Parentesis");} |
+  <CERRARPARENTESIS:")"> {System.out.println("Cerrar Parentesis");} |
+  <ABRIRLLAVE:"{"> {System.out.println("Abrir Llave");} |
+  <CERRARLLAVE:"}"> {System.out.println("Cerrar Llave");} |
+  <OPSUMA: "+"> {System.out.println("Operador Suma");} |
+  <OPRESTA: "-"> {System.out.println("Operador Resta");} |
+  <OPPOTENCIA:"^"> {System.out.println("Operador Potencia");} |
+  <OPMULTIPLICACION:"*"> {System.out.println("Operador multiplicacion");} |
+  <OPDIVISION:"/"> {System.out.println("Operador Division");} 
+
+}
+
+//Estructuras y caracteres de escape
+SKIP:
+{ " " | "\t" | "\n" | "\r" }
+
+//Unidad principal
+void expression() : {}
+{
+  (<VAR>|<NUM>|<LETRAMIN>|<LETRAMAY>|<ABRIRPARENTESIS>|<CERRARPARENTESIS>|<ABRIRLLAVE>|<CERRARLLAVE>|<OPSUMA>|<OPRESTA>|<OPPOTENCIA>|
+    <OPMULTIPLICACION>|<OPDIVISION>|<BINARIO>|<OCTAL>|<HEX>|<TIPODEDATO>|<GUION>)+ <EOF>
+}
