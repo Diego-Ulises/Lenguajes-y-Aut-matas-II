@@ -1,0 +1,196 @@
+options {
+LOOKAHEAD=1;
+}
+PARSER_BEGIN(Ejemplo)
+public class Ejemplo{
+public static void main(String args[]) throws ParseException {
+	Ejemplo miParser = new Ejemplo(System.in);
+	miParser .listaExpr();
+}
+}
+PARSER_END(Ejemplo)
+SKIP :{
+	" "
+	| "\t"
+	| "\n"
+	| "\r"
+	| "\u00ef"
+	| "\u00bb"
+	| "\u00bf"
+}
+TOKEN: {
+<OPMENI: "<="> |
+<OPMAYI: ">="> |
+<OPMAY: ">"> |
+<OPMEN: "<"> |
+<OPDIF: "!="> |
+<OPNOT: "!"> |
+<OPCOMP: "=="> |
+<OPIG: "="> |
+<INCREMENT: "++"> |
+<OPSUM: "+"> |
+<OPMUL: "*"> |
+<DECREMENT: "--"> |
+<OPRES: "-"> |
+<OPDIV: "/"> |
+<OPMOD: "%"> |
+<OPPOT: "^"> |
+<OPAND: "&&"> |
+<OPOR: "||">
+|<INT:"int">
+|<ABRIRPARENTESIS:"(">
+|<CERRARPARENTESIS:")">
+|<ABRIRLLAVE:"{">
+|<CERRARLLAVE:"}">
+|<SI:"if">
+|<SINO:"else">
+|<MIENTRAS:"while">
+|<HASTAQUE:"for">
+|<HAZ:"do">
+|<CONMUTADOR:"switch">
+|<CASO: "case">
+|<ROMPER:"break">
+|<PORDEFECTO:"default">
+|<CADENA:"string">
+|<VOF:"vof">
+|<RETORNAR:"return">
+|<ESTATICO:"static">
+|<NULO:"null">
+|<PUBLICA:"public">
+|<VACIO:"void">
+|<PRIVADA:"private">
+|<PROTEGIDA:"protected">
+|<ESCIERTO: "true">
+|<ESFALSO: "false">
+|<ID: <LETRA> (<LETRA> | <DIGDEC> | "_")* > 
+|<PC: [";"]>
+|<DOSPUNTOS: [":"]>
+|<ESPACIO: [" "]>
+|<COMILLA: ["'"]>
+|<ENTERO: ("0" | ["1"-"9"](<DIGDEC>)*)>|
+<DIGDEC: ["0"-"9"]>|
+<LETRA: (["a"-"z"]|["A"-"Z"])>
+}
+
+void listaExpr() : {} {
+	(exp())+
+}
+void exp() :{}{
+	(A() <PC>)
+
+	|(<MIENTRAS><ABRIRPARENTESIS>condicion()<CERRARPARENTESIS><ABRIRLLAVE>(exp())*<CERRARLLAVE>{System.out.println("Se encontro MIENTRAS");})
+	
+	|(<SI><ABRIRPARENTESIS>condicion()<CERRARPARENTESIS><ABRIRLLAVE>(exp())*<CERRARLLAVE>(siNo())?{System.out.println("Se encontro SI");})
+	
+	|(<HASTAQUE><ABRIRPARENTESIS>(<INT>)?<ID><OPIG><ENTERO><PC>condicion()<PC><ID>cremento()<CERRARPARENTESIS><ABRIRLLAVE>(exp())*<CERRARLLAVE> {System.out.println("Se encontro HASTAQUE");})
+
+	|(<HAZ> <ABRIRLLAVE> (exp())* <CERRARLLAVE> <MIENTRAS> <ABRIRPARENTESIS> condicion() <CERRARPARENTESIS> <PC>{System.out.println("Se encontro HAZ MIENTRAS");})
+	
+	|(<CONMUTADOR> <ABRIRPARENTESIS> <ID> <CERRARPARENTESIS> <ABRIRLLAVE> (casos())* (<PORDEFECTO> <DOSPUNTOS> A() (<ROMPER> <PC>)?)? <CERRARLLAVE>{System.out.println("Se encontro un CONMUTADOR");})
+
+	|((modificadorAcceso())? tipoDato() <ID> (<OPIG> valor())? <DOSPUNTOS>)
+	
+}
+void operadorAritmetico() : {} {
+	<OPSUM> {System.out.println("Se encontro un SUMA");}
+	|<OPRES> {System.out.println("Se encontro un RESTA");}
+	|<OPMUL> {System.out.println("Se encontro un MULTIPLICACION");}
+	|<OPDIV> {System.out.println("Se encontro un DIVISION");}
+}
+void modificadorAcceso() : {} {
+	<PRIVADA> {System.out.println("Se encontro modificador de acceso PRIVADA");}
+	|<PUBLICA> {System.out.println("Se encontro modificador de acceso PUBLICA");}
+	|<PROTEGIDA> {System.out.println("Se encontro modificador de acceso PROTEGIDA");}
+}
+void tipoDato() : {} {
+	<INT> {System.out.println("Se encontro un INT");}
+	|<CADENA> {System.out.println("Se encontro una CADENA");}
+	|<VOF> {System.out.println("Se encontro un BOOLEANO");}
+}
+
+void condicion() : {} {
+	A() | <ESCIERTO> | <ESFALSO>  {System.out.println("Se encontro una CONDICION");}
+}
+void valor() : {}{ LOOKAHEAD(1)
+	<ID> {System.out.println("Se encontro un ID");} 
+	|<ENTERO> {System.out.println("Se encontro un ENTERO");}
+	|<COMILLA> valor() <COMILLA> {System.out.println("Se encontro una CADENA");}
+	|<NULO> {System.out.println("Se encontro NULO");}
+}
+void operadorlogico() : {}{ 
+	<OPMAY> | <OPMEN> | <OPIG> | <OPMAYI> | <OPMENI> {System.out.println("Se encontró un OPERADOR LOGICO");}	
+}
+void siNo() :{} {
+	<SINO> <ABRIRLLAVE> exp() <CERRARLLAVE> {System.out.println("Se encontro SI NO");}
+}
+void casos() : {}{
+	<CASO> valor() <DOSPUNTOS> (exp())* (<ROMPER> <PC>)? {System.out.println("Se encontro un CASO");}
+}
+void cremento() : {}{ LOOKAHEAD(1)
+	<INCREMENT> {System.out.println("Se encontro un INCREMENTO");} 
+	|<DECREMENT> {System.out.println("Se encontro un DECREMENTO");} 
+}
+void A() :
+{{System.out.println("Se encontro una operacion matematica");}}
+{
+    B() Ap()
+}
+void Ap() : //SUMA
+{}
+{
+  [(<OPSUM> | <OPRES>) B() Ap()] 
+}
+
+void B() :
+{}
+{
+  C() Bp()
+}
+
+void Bp() : //MULTIPLICACION
+{}
+{
+  [(<OPMUL> | <OPDIV> | <OPMOD> | <OPPOT>) C() Bp() ] 
+}
+void C():
+{}
+{
+  D() Cp()
+}
+
+void Cp() : //COMPARACION
+{}
+{
+  [(<OPMENI> | <OPMAYI> | <OPMEN> | <OPMAY> | <OPDIF> | <OPCOMP>) D() Cp()]
+}
+
+void D() : 
+{}
+{
+  E() Dp()
+}
+
+void Dp() : //LOGICOS
+{}
+{
+  [(<OPNOT> | <OPAND> | <OPOR>) E() Dp()]
+}
+
+void E() : //ASIGNACION
+{}
+{
+  F() Ep()
+}
+
+void Ep() :
+{}
+{
+  [(<OPIG>) F() Ep()]
+}
+ 
+
+void F() :
+{}
+{
+    <ENTERO> | <ID> | "(" A() ")"
+}

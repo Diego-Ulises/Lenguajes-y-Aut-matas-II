@@ -1,0 +1,113 @@
+PARSER_BEGIN(Practica2)
+/** Simple brace matcher. */
+public class Practica2 {
+  /** Main entry point. */
+  public static void main(String args[]) throws ParseException {
+    Practica2 parser = new Practica2(System.in);
+    parser.Inicial();
+    System.out.println("F");
+  }
+}
+PARSER_END(Practica2)
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+|"\u00ef"
+|"\u00ef"
+}
+TOKEN :
+{
+<OPMENI: "<="> |
+<OPMAYI: ">="> |
+<OPMAY: ">"> |
+<OPMEN: "<"> |
+<OPDIF: "!="> |
+<OPNOT: "!"> |
+<OPCOMP: "=="> |
+<OPIG: "="> |
+<OPSUM: "+"> |
+<OPMUL: "*"> |
+<OPRES: "-"> |
+<OPDIV: "/"> |
+<OPMOD: "%"> |
+<OPPOT: "^"> |
+<OPAND: "&&"> |
+<OPOR: "||"> |
+<ENTERO: ("0" | ["1"-"9"](<DIGDEC>)*)>|
+<DIGDEC: ["0"-"9"]>|
+<ID: <LETRA> (<LETRA> | <DIGDEC> | "_")* > |
+<LETRA: (["a"-"z"]|["A"-"Z"])>
+}
+/** Root production. */
+void Inicial() :
+{}
+{
+   (A())+ <EOF>
+}
+void A() :
+{}
+{
+    B() Ap()
+}
+void Ap() : //SUMA
+{}
+{
+  [(<OPSUM> | <OPRES>) B() Ap()] 
+}
+
+void B() :
+{}
+{
+  C() Bp()
+}
+
+void Bp() : //MULTIPLICACION
+{}
+{
+  [(<OPMUL> | <OPDIV> | <OPMOD> | <OPPOT>) C() Bp() ] 
+}
+void C():
+{}
+{
+  D() Cp()
+}
+
+void Cp() : //COMPARACION
+{}
+{
+  [(<OPMENI> | <OPMAYI> | <OPMEN> | <OPMAY> | <OPDIF> | <OPCOMP>) D() Cp()]
+}
+
+void D() : 
+{}
+{
+  E() Dp()
+}
+
+void Dp() : //LOGICOS
+{}
+{
+  [(<OPNOT> | <OPAND> | <OPOR>) E() Dp()]
+}
+
+void E() : //ASIGNACION
+{}
+{
+  F() Ep()
+}
+
+void Ep() :
+{}
+{
+  [(<OPIG>) F() Ep()]
+}
+ 
+
+void F() :
+{}
+{
+    <ENTERO> | <ID> | "(" A() ")"
+}
